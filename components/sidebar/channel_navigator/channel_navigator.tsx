@@ -35,6 +35,8 @@ export type Props = {
     offTopicDisplayName: string;
     showTutorialTip: boolean;
     isQuickSwitcherOpen: boolean;
+    showCreateTutorialTip: boolean;
+    showInviteTutorialTip: boolean;
     actions: {
         openModal: <P>(modalData: ModalData<P>) => void;
         closeModal: (modalId: string) => void;
@@ -128,6 +130,8 @@ export default class ChannelNavigator extends React.PureComponent<Props> {
                     townSquareDisplayName={this.props.townSquareDisplayName}
                     offTopicDisplayName={this.props.offTopicDisplayName}
                     showTutorialTip={this.props.showTutorialTip}
+                    showCreateTutorialTip={this.props.showCreateTutorialTip}
+                    showInviteTutorialTip={this.props.showInviteTutorialTip}
                     addChannelButton={this.props.addChannelButton}
                 />
             );

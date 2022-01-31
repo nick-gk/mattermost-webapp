@@ -25,6 +25,9 @@ import MenuWrapper from 'components/widgets/menu/menu_wrapper';
 import MainMenu from 'components/main_menu';
 import MenuTutorialTip from 'components/tutorial/menu_tutorial_tip';
 import AddChannelDropdown from 'components/sidebar/add_channel_dropdown';
+import {isFirstAdmin} from 'components/next_steps_view/steps';
+import {AdminOnBoardingTourSteps, TutorialTourCategories} from 'components/tutorial_tour_tip/tutorial_tour_tip.constant';
+import {useShowTutorialStep} from 'components/tutorial_tour_tip/hooks';
 
 type SidebarHeaderContainerProps = {
     menuInHeading: boolean;
@@ -121,6 +124,9 @@ const SidebarHeader: React.FC<Props> = (props: Props): JSX.Element => {
     const channelsByName = useSelector((state: GlobalState) => getChannelsNameMapInCurrentTeam(state));
     const townSquareDisplayName = channelsByName[Constants.DEFAULT_CHANNEL]?.display_name || '';
     const offTopicDisplayName = channelsByName[Constants.OFFTOPIC_CHANNEL]?.display_name || '';
+    const isFirstAdminUser = useSelector(isFirstAdmin);
+    const showCreateTutorialTip = useShowTutorialStep(AdminOnBoardingTourSteps.CREATE_AND_JOIN_CHANNELS, TutorialTourCategories.ADMIN_ON_BOARDING);
+    const showInviteTutorialTip = useShowTutorialStep(AdminOnBoardingTourSteps.INVITE_PEOPLE, TutorialTourCategories.ADMIN_ON_BOARDING);
 
     const [menuToggled, setMenuToggled] = useState(false);
 
@@ -156,6 +162,8 @@ const SidebarHeader: React.FC<Props> = (props: Props): JSX.Element => {
                 townSquareDisplayName={townSquareDisplayName}
                 offTopicDisplayName={offTopicDisplayName}
                 showTutorialTip={showAddChannelTip}
+                showCreateTutorialTip={isFirstAdminUser && showCreateTutorialTip}
+                showInviteTutorialTip={isFirstAdminUser && showInviteTutorialTip}
                 addChannelButton={addChannelButton}
             />
         );

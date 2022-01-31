@@ -12,6 +12,8 @@ import OverlayTrigger from 'components/overlay_trigger';
 import Tooltip from 'components/tooltip';
 
 import {AddChannelButtonTreatments} from 'mattermost-redux/constants/config';
+import CreateAndJoinChannelsTour from 'components/admin_onboarding_tour/create_and_join _channels_tour_tip';
+import {InvitePeopleTour} from '../admin_onboarding_tour/invite_people_tour_tip';
 
 import AddChannelTutorialTip from './add_channel_tutorial_tip';
 
@@ -28,6 +30,8 @@ type Props = {
     townSquareDisplayName: string;
     offTopicDisplayName: string;
     showTutorialTip: boolean;
+    showCreateTutorialTip: boolean;
+    showInviteTutorialTip: boolean;
     addChannelButton?: AddChannelButtonTreatments;
 };
 
@@ -70,6 +74,7 @@ class AddChannelDropdown extends React.PureComponent<Props, State> {
                     text={intl.formatMessage({id: 'sidebar_left.add_channel_dropdown.invitePeople', defaultMessage: 'Invite People'})}
                     extraText={intl.formatMessage({id: 'sidebar_left.add_channel_dropdown.invitePeopleExtraText', defaultMessage: 'Add people to the team'})}
                 />
+                {this.props.showInviteTutorialTip && <InvitePeopleTour/>}
             </Menu.Group>
         );
 
@@ -125,6 +130,7 @@ class AddChannelDropdown extends React.PureComponent<Props, State> {
                     {joinPublicChannel}
                     {createChannel}
                     {createDirectMessage}
+                    {this.props.showCreateTutorialTip && <CreateAndJoinChannelsTour/>}
                 </Menu.Group>
                 {createCategory}
                 {invitePeople}
@@ -139,7 +145,7 @@ class AddChannelDropdown extends React.PureComponent<Props, State> {
     }
 
     render() {
-        const {intl, canCreateChannel, canJoinPublicChannel} = this.props;
+        const {intl, canCreateChannel, canJoinPublicChannel, showCreateTutorialTip, showInviteTutorialTip} = this.props;
 
         if (!(canCreateChannel || canJoinPublicChannel)) {
             return null;
@@ -172,6 +178,7 @@ class AddChannelDropdown extends React.PureComponent<Props, State> {
             <MenuWrapper
                 className='AddChannelDropdown'
                 onToggle={this.trackOpen}
+                open={showInviteTutorialTip || showCreateTutorialTip}
             >
                 <OverlayTrigger
                     delayShow={500}

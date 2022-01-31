@@ -19,6 +19,7 @@ import Constants from 'utils/constants';
 import {wrapEmojis} from 'utils/emoji_utils';
 import {isDesktopApp} from 'utils/user_agent';
 import {cmdOrCtrlPressed, localizeMessage} from 'utils/utils';
+import ChannelsAndDirectMessagesTour from 'components/admin_onboarding_tour/channels_and_direct _messages_tour_tip';
 
 import ChannelMentionBadge from '../channel_mention_badge';
 import SidebarChannelIcon from '../sidebar_channel_icon';
@@ -67,6 +68,8 @@ type Props = {
     firstChannelName?: string;
 
     isMobileView: boolean;
+
+    showChannelsTutorialStep: boolean;
 
     actions: {
         clearChannelSelection: () => void;
@@ -176,6 +179,7 @@ export default class SidebarChannelLink extends React.PureComponent<Props, State
             showTutorialTip,
             unreadMentions,
             firstChannelName,
+            showChannelsTutorialStep,
         } = this.props;
 
         let tutorialTip: JSX.Element | null = null;
@@ -189,6 +193,11 @@ export default class SidebarChannelLink extends React.PureComponent<Props, State
                     isMobileView={this.props.isMobileView}
                 />
             );
+        }
+
+        let firstAdminTutorialTip: JSX.Element | null = null;
+        if (showChannelsTutorialStep && (firstChannelName === channel.name || channel.name === Constants.DEFAULT_CHANNEL)) {
+            firstAdminTutorialTip = (<ChannelsAndDirectMessagesTour firstChannelName={firstChannelName}/>);
         }
 
         let labelElement: JSX.Element = (
@@ -292,6 +301,7 @@ export default class SidebarChannelLink extends React.PureComponent<Props, State
             >
                 {content}
                 {tutorialTip}
+                {firstAdminTutorialTip}
             </Link>
         );
 

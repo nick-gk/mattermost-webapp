@@ -57,6 +57,7 @@ import {ModalData} from 'types/actions';
 import {FileInfo} from 'mattermost-redux/types/files';
 import {Emoji} from 'mattermost-redux/types/emojis';
 import {FilePreviewInfo} from 'components/file_preview/file_preview';
+import SendMessageTour from 'components/admin_onboarding_tour/send_message_tour_tip';
 
 import CreatePostTip from './create_post_tip';
 
@@ -124,6 +125,11 @@ type Props = {
   *  Data used for deciding if tutorial tip is to be shown
   */
     showTutorialTip: boolean;
+
+    /**
+  *  Data used for deciding if first admin tutorial tip is to be shown
+  */
+    showSendTutorialTip: boolean;
 
     /**
   *  Data used for advancing from create post tip
@@ -351,6 +357,10 @@ class CreatePost extends React.PureComponent<Props, State> {
 
     constructor(props: Props) {
         super(props);
+        const channelName = 'Town Square';
+        const message = Utils.localizeAndFormatMessage('adminOnBoardingTour.sendMessage.message',
+            '😀 Hey everyone! Here’s a space to discuss {channelName}', {channelName},
+        );
         this.state = {
             message: this.props.draft.message,
             caretPosition: this.props.draft.message.length,
@@ -1307,6 +1317,7 @@ class CreatePost extends React.PureComponent<Props, State> {
             draft,
             fullWidthTextBox,
             showTutorialTip,
+            showSendTutorialTip,
             canPost,
         } = this.props;
         const readOnlyChannel = !canPost;
@@ -1358,6 +1369,11 @@ class CreatePost extends React.PureComponent<Props, State> {
                     currentChannelTeammateUsername={this.props.currentChannelTeammateUsername}
                 />
             );
+        }
+
+        let firstAdminTutorialTip = null;
+        if (showSendTutorialTip) {
+            firstAdminTutorialTip = (<SendMessageTour/>);
         }
 
         let centerClass = '';
@@ -1520,6 +1536,7 @@ class CreatePost extends React.PureComponent<Props, State> {
                             </span>
                         </div>
                         {tutorialTip}
+                        {firstAdminTutorialTip}
                     </div>
                     <div
                         id='postCreateFooter'

@@ -1,7 +1,7 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import {connect} from 'react-redux';
+import {connect, useSelector} from 'react-redux';
 import {bindActionCreators, Dispatch, ActionCreatorsMapObject} from 'redux';
 
 import {Action} from 'mattermost-redux/types/actions';
@@ -17,6 +17,8 @@ import {isModalOpen} from 'selectors/views/modals';
 
 import {ModalData} from 'types/actions';
 import {GlobalState} from 'types/store';
+import {AdminOnBoardingTourSteps, TutorialTourCategories} from 'components/tutorial_tour_tip/tutorial_tour_tip.constant';
+import {isFirstAdmin} from '../../next_steps_view/steps';
 
 import ChannelNavigator from './channel_navigator';
 
@@ -39,7 +41,11 @@ function mapStateToProps(state: GlobalState) {
     const config = getConfig(state);
     const channelsByName = getChannelsNameMapInCurrentTeam(state);
     const enableTutorial = config.EnableTutorial === 'true';
-    const tutorialStep = getInt(state, Preferences.TUTORIAL_STEP, getCurrentUserId(state), TutorialSteps.FINISHED);
+    const currentUserId = getCurrentUserId(state);
+    const tutorialStep = getInt(state, Preferences.TUTORIAL_STEP, currentUserId, TutorialSteps.FINISHED);
+    const isFirstAdminUser = isFirstAdmin(state);
+    const showCreateTutorialTip = getInt(state, TutorialTourCategories.ADMIN_ON_BOARDING, currentUserId, 0) === AdminOnBoardingTourSteps.CREATE_AND_JOIN_CHANNELS;
+    const showInviteTutorialTip = getInt(state, TutorialTourCategories.ADMIN_ON_BOARDING, currentUserId, 0) === AdminOnBoardingTourSteps.INVITE_PEOPLE;
 
     return {
         townSquareDisplayName: channelsByName[Constants.DEFAULT_CHANNEL]?.display_name || '',
@@ -50,6 +56,8 @@ function mapStateToProps(state: GlobalState) {
         showUnreadsCategory: shouldShowUnreadsCategory(state),
         addChannelButton: getAddChannelButtonTreatment(state),
         isQuickSwitcherOpen: isModalOpen(state, ModalIdentifiers.QUICK_SWITCH),
+        showCreateTutorialTip: isFirstAdminUser && showCreateTutorialTip,
+        showInviteTutorialTip: isFirstAdminUser && showInviteTutorialTip,
     };
 }
 

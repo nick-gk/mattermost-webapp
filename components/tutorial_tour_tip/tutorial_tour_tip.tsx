@@ -51,7 +51,7 @@ type Props = {
     width?: string | number;
 }
 
-const TutorialTourTip: React.FC<Props> = ({
+const TutorialTourTip = ({
     title,
     screen,
     imageURL,

@@ -30,6 +30,8 @@ describe('Components/ChannelNavigator', () => {
             offTopicDisplayName: 'idk',
             showTutorialTip: true,
             isQuickSwitcherOpen: false,
+            showCreateTutorialTip: false,
+            showInviteTutorialTip: false,
             actions: {
                 openModal: jest.fn(),
                 closeModal: jest.fn(),

@@ -56,6 +56,8 @@ import {getCurrentLocale} from 'selectors/i18n';
 import {getEmojiMap, getShortcutReactToLastPostEmittedFrom} from 'selectors/emojis';
 import {setGlobalItem, actionOnGlobalItemsWithPrefix} from 'actions/storage';
 import {openModal} from 'actions/views/modals';
+import {isFirstAdmin} from 'components/next_steps_view/steps';
+import {AdminOnBoardingTourSteps, TutorialTourCategories} from 'components/tutorial_tour_tip/tutorial_tour_tip.constant';
 import {Constants, Preferences, StoragePrefixes, TutorialSteps, UserStatuses} from 'utils/constants';
 import {canUploadFiles} from 'utils/file_utils';
 import {isFeatureEnabled} from 'utils/utils';
@@ -91,6 +93,7 @@ function makeMapStateToProps() {
         const groupsWithAllowReference = useGroupMentions ? getAssociatedGroupsForReferenceByMention(state, currentTeamId, currentChannel.id) : null;
         const enableTutorial = config.EnableTutorial === 'true';
         const showTutorialTip = enableTutorial && tutorialStep === TutorialSteps.POST_POPOVER;
+        const showSendTutorialTip = isFirstAdmin(state) && getInt(state, TutorialTourCategories.ADMIN_ON_BOARDING, currentUserId, 0) === AdminOnBoardingTourSteps.SEND_MESSAGE;
 
         return {
             currentTeamId,
@@ -102,6 +105,7 @@ function makeMapStateToProps() {
             ctrlSend: getBool(state, Preferences.CATEGORY_ADVANCED_SETTINGS, 'send_on_ctrl_enter'),
             fullWidthTextBox: get(state, Preferences.CATEGORY_DISPLAY_SETTINGS, Preferences.CHANNEL_DISPLAY_MODE, Preferences.CHANNEL_DISPLAY_MODE_DEFAULT) === Preferences.CHANNEL_DISPLAY_MODE_FULL_SCREEN,
             showTutorialTip,
+            showSendTutorialTip,
             messageInHistoryItem: getMessageInHistoryItem(state),
             draft,
             latestReplyablePostId,

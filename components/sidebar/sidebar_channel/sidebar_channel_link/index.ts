@@ -20,6 +20,8 @@ import {isChannelSelected} from 'selectors/views/channel_sidebar';
 import {getIsMobileView} from 'selectors/views/browser';
 import {GlobalState} from 'types/store';
 import Constants, {Preferences, RecommendedNextSteps} from 'utils/constants';
+import {isFirstAdmin} from 'components/next_steps_view/steps';
+import {AdminOnBoardingTourSteps, TutorialTourCategories} from '../../../tutorial_tour_tip/tutorial_tour_tip.constant';
 
 import SidebarChannelLink from './sidebar_channel_link';
 
@@ -46,6 +48,7 @@ function makeMapStateToProps() {
         const enableTutorial = config.EnableTutorial === 'true';
         const currentUserId = getCurrentUserId(state);
         const tutorialStep = getInt(state, Constants.Preferences.TUTORIAL_STEP, currentUserId, Constants.TutorialSteps.FINISHED);
+        const showChannelsTutorialStep = isFirstAdmin(state) && getInt(state, TutorialTourCategories.ADMIN_ON_BOARDING, currentUserId, 0) === AdminOnBoardingTourSteps.CHANNELS_AND_DIRECT_MESSAGES;
 
         return {
             unreadMentions: unreadCount.mentions,
@@ -58,6 +61,7 @@ function makeMapStateToProps() {
             townSquareDisplayName: channelsByName[Constants.DEFAULT_CHANNEL]?.display_name || '',
             offTopicDisplayName: channelsByName[Constants.OFFTOPIC_CHANNEL]?.display_name || '',
             isMobileView: getIsMobileView(state),
+            showChannelsTutorialStep,
         };
     };
 }
