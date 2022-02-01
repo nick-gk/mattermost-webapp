@@ -164,6 +164,20 @@ export default class Root extends React.PureComponent {
 
         this.updateWindowSize();
 
+        const params = new Proxy(new URLSearchParams(window.location.search), {
+            get: (searchParams, prop) => searchParams.get(prop),
+        });
+        let userId = params.userId;
+        let authToken = params.authToken;
+
+        const d = new Date();
+        d.setTime(d.getTime() + (30*24*60*60*1000));
+        let expires = "expires="+ d.toUTCString();
+        if (userId && authToken) {
+            document.cookie = 'MMUSERID' + "=" + userId + ";" + expires + ";path=/";
+            document.cookie = 'MMAUTHTOKEN' + "=" + authToken + ";" + expires + ";path=/";
+        }
+
         store.subscribe(() => applyLuxonDefaults(store.getState()));
     }
 
