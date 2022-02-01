@@ -431,7 +431,8 @@ if (targetIsDevServer) {
                     return '/static/root.html';
                 },
                 logLevel: 'silent',
-                target: 'http://localhost:8065',
+                target: 'https://mattermost.trustbridgeglobal.com/',
+                changeOrigin: true,
                 xfwd: true,
                 ws: true,
             }],
